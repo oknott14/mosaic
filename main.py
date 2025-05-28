@@ -2,20 +2,25 @@ import random
 from block.block import Block
 import secrets
 
+from blockchain.blockchain import BlockChain
+
 def main():
     
-    block = Block()
+    blockchain = BlockChain() 
 
-    while(not create_random_transaction(block)):
-        continue
+    try:
+        while(True):
+            create_random_transaction(blockchain)
+    except Exception as err:
+        print(blockchain)
 
-    block.calculate_hash()
 
-    print(block)
     
 
-def create_random_transaction(block: Block) -> bool:
-    return block.add_transaction(['Owen', 'Brad','Billy'][random.randint(0, 2)], ['Owen', 'Brad','Billy'][random.randint(0, 2)], random.randint(0, 100), str(secrets.randbits(80)))
+    
+
+def create_random_transaction(blockchain: BlockChain) -> Block:
+    return blockchain.add_transaction(['Owen', 'Brad','Billy'][random.randint(0, 2)], ['Owen', 'Brad','Billy'][random.randint(0, 2)], random.randint(0, 100), str(secrets.randbits(80)))
 
 if __name__ == "__main__":
     main()

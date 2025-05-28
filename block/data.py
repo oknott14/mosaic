@@ -10,12 +10,12 @@ class BlockData:
     self.limit = limit
 
   def add_transaction(self, frm: str, to: str, amnt: float, key:str) -> bool:
-    if (self.count >= self.limit):
-      return True
+    if (self.is_full()):
+      return False
     else:
       self.transactions[self.count] = Transaction(frm, to, amnt, key)
       self.count += 1
-      return self.count >= self.limit
+      return True
     
   def is_full(self) -> bool:
     return self.count >= self.limit
