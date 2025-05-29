@@ -1,20 +1,24 @@
 import random
-from block.block import Block
 import secrets
-
+from account.account import Account
+from block.block import Block
 from blockchain.blockchain import BlockChain
 
+
 def main():
-    
-    blockchain = BlockChain() 
+    owen = Account()
+    brad = Account()
+    # blockchain = BlockChain() 
 
-    try:
-        while(True):
-            create_random_transaction(blockchain)
-    except Exception as err:
-        print(blockchain)
+    # try:
+    #     while(True):
+    #         create_random_transaction(blockchain)
+    # except Exception as err:
+    #     print(blockchain)
 
-
+    transaction = owen.prepare_transaction(brad.id, 10.43)
+    transaction.amnt = 1000
+    print(owen.verify_transaction(transaction))
     
 
     
