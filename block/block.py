@@ -1,17 +1,22 @@
 import hashlib
 import time
+from typing import TypeVar, Generic
 from block.data import BlockData
+from block.transaction import Transaction
+from network.node import TTransaction
 
-class Block:
+TTransaction = TypeVar('TTransaction')
+class Block(Generic[TTransaction]):
   index: int
   timestamp: float
   previous_hash: str
   nonce: int = 0
-  data: BlockData
+  data: BlockData[TTransaction]
   hash: str | None = None
   hash_validation_str: str
   difficulty: int
-  def __init__(self, index: int = 0, data: BlockData = BlockData(), previous_hash: str ='', difficulty: int = 4):
+
+  def __init__(self, index: int = 0, data: BlockData[TTransaction] = BlockData(), previous_hash: str ='', difficulty: int = 4):
     self.timestamp = time.time()
     self.data = data
     self.previous_hash = previous_hash
@@ -20,23 +25,26 @@ class Block:
     self.hash_validation_str = '0'*difficulty
     self.index = index
     
-  def add_transaction(self, frm: str, to: str, amnt: float, key:str) -> bool:
-    return self.data.add_transaction(frm, to, amnt, key)
+  def add_transaction(self, transaction: TTransaction) -> bool:
+    return self.data.add_transaction(transaction)
 
-
-  def calculate_hash(self) -> bool:
-    if (self.data.is_full() and not self.has_valid_hash()):
+  async def calculate_hash(self):
+    if (self.has_max_transactions() and not self.has_valid_hash()):
       hash_string = self.get_hash_string()
       self.hash = hashlib.sha256(hash_string.format(nonce = self.nonce).encode()).hexdigest()
       while (not self.has_valid_hash()):
         self.nonce += 1
         self.hash = hashlib.sha256(hash_string.format(nonce = self.nonce).encode()).hexdigest()
-    
-    return self.has_valid_hash()
+      return self
+    else:
+      return None
     
   def has_valid_hash(self) -> bool:
     return self.hash is not None and self.hash[0:self.difficulty] == self.hash_validation_str
 
+  def has_max_transactions(self) -> bool:
+    return self.data.is_full()
+  
   def is_valid_and_complete(self) -> bool:
     return self.data.is_full() and self.has_valid_hash()
   

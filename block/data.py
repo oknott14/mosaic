@@ -1,19 +1,21 @@
-from block.transaction import Transaction
+from typing import TypeVar, Generic
 import numpy as np
+from block.transaction import Transaction
 
-class BlockData:
+TTransaction = TypeVar('TTransaction')
+class BlockData(Generic[TTransaction]):
   transactions: np.typing.NDArray
   count: int = 0
   limit: int
   def __init__(self, limit: int = 10):
-    self.transactions = np.ndarray(limit, dtype=Transaction)
+    self.transactions = np.ndarray(limit, dtype=TTransaction)
     self.limit = limit
 
-  def add_transaction(self, frm: str, to: str, amnt: float, key:str) -> bool:
+  def add_transaction(self, transaction: TTransaction) -> bool:
     if (self.is_full()):
       return False
     else:
-      self.transactions[self.count] = Transaction(frm, to, amnt, key)
+      self.transactions[self.count] = transaction
       self.count += 1
       return True
     

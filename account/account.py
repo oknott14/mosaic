@@ -3,8 +3,9 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.exceptions import InvalidSignature
 import secrets
 from block.transaction import Transaction
+from network.node import Node
 
-class Account:
+class Account(Node):
   id: str
   balance: float
 

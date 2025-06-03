@@ -1,30 +1,22 @@
+import asyncio
 import random
 import secrets
 from account.account import Account
 from block.block import Block
 from blockchain.blockchain import BlockChain
+from network.network import Network
 
 
-def main():
+async def main():
     owen = Account()
     brad = Account()
-    # blockchain = BlockChain() 
 
-    # try:
-    #     while(True):
-    #         create_random_transaction(blockchain)
-    # except Exception as err:
-    #     print(blockchain)
-
-    transaction = owen.prepare_transaction(brad.id, 10.43)
-    transaction.amnt = 1000
-    print(owen.verify_transaction(transaction))
+    network = Network()
+    network.register_node(owen)
+    network.register_node(brad)
     
-
-    
-
-def create_random_transaction(blockchain: BlockChain) -> Block:
-    return blockchain.add_transaction(['Owen', 'Brad','Billy'][random.randint(0, 2)], ['Owen', 'Brad','Billy'][random.randint(0, 2)], random.randint(0, 100), str(secrets.randbits(80)))
+    asyncio.create_task(owen.send_transaction(owen.prepare_transaction('brad', 10)))
+    asyncio.create_task(brad.send_transaction(brad.prepare_transaction('owen', 5))).add_done_callback(lambda: print(owen.blockchain))
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

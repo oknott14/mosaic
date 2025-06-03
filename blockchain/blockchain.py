@@ -1,6 +1,7 @@
 import hashlib
 import numpy as np
 from block.block import Block
+from block.transaction import Transaction
 
 
 class BlockChain:
@@ -30,28 +31,26 @@ class BlockChain:
     if (self.blocks >= len(self.chain)):
       raise Exception(message = 'Failed to add new block -> block limit reached')
     
-    if (block == None):
-      block = self.create_new_block()
+    if (block == self.current_block):
+      return self.current_block
 
     self.chain[self.blocks] = block
     self.blocks += 1
     return block
-    
-    
 
-  def add_transaction(self, frm: str, to: str, amnt: float, key:str) -> Block:
+  def add_transaction(self, transaction: Transaction) -> Block:
     if (self.blocks > 0):
-      if (not self.current_block.add_transaction(frm, to, amnt, key)):
+      if (not self.current_block.add_transaction(transaction)):
         self.current_block.calculate_hash()
         print(self.current_block)
         block = self.add_block()
-        block.add_transaction(frm, to, amnt, key)
+        block.add_transaction(transaction)
         return block
       else:
         return self.current_block
     else:
       block = self.create_genesis_block()
-      block.add_transaction(frm, to, amnt, key)
+      block.add_transaction(transaction)
       return block
 
   def __str__(self):
