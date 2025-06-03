@@ -1,7 +1,7 @@
 from abc import ABC
 import asyncio
 from typing import List
-from block.block import Block, PublishedBlock
+from block import Block, PublishedBlock
 from event import Event
 from network.node import Node
 

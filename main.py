@@ -1,10 +1,10 @@
 import asyncio
 import random
 import secrets
-from account.account import Account
-from block.block import Block
-from blockchain.blockchain import BlockChain
-from network.network import Network
+from account import Account
+from block import Block
+from blockchain import BlockChain
+from network import Network
 
 
 async def main():
