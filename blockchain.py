@@ -1,6 +1,6 @@
 from typing import List, TypeVar, Generic
 from block import Block
-from block.transaction import Transaction
+from transaction import Transaction
 
 TTransaction = TypeVar("TTransaction")
 class BlockChain(Generic[TTransaction]):

@@ -3,12 +3,12 @@ from typing import TypeVar, Generic
 import asyncio
 import secrets
 from block import Block, PublishedBlock
-from block.transaction import Transaction
+from transaction import Transaction
 from blockchain import BlockChain
 from event import Event
 
 TTransaction = TypeVar('TTransaction')
-class BaseNode(Generic[TTransaction]):
+class Node(Generic[TTransaction]):
   __id: str
   blockchain: BlockChain[TTransaction]
 

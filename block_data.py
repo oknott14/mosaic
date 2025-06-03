@@ -1,6 +1,6 @@
 from typing import TypeVar, Generic
 import numpy as np
-from block.transaction import Transaction
+from transaction import Transaction
 
 TTransaction = TypeVar('TTransaction')
 class BlockData(Generic[TTransaction]):

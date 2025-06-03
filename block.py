@@ -1,9 +1,9 @@
 import hashlib
 import time
 from typing import TypeVar, Generic
-from block.data import BlockData
-from block.transaction import Transaction
-from network.node import TTransaction
+from block_data import BlockData
+from transaction import Transaction
+from node import TTransaction
 
 TTransaction = TypeVar('TTransaction')
 class Block(Generic[TTransaction]):

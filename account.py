@@ -2,8 +2,8 @@ from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.exceptions import InvalidSignature
 import secrets
-from block.transaction import Transaction
-from network.node import Node
+from transaction import Transaction
+from node import Node
 
 class Account(Node):
   id: str
