@@ -2,9 +2,9 @@ services:
   node_1:
     build:
       context: .
-      dockerfile: apps/node/Dockerfile
+      dockerfile: ./apps/node/Dockerfile
       target: development
     ports:
       - 3000:3000
     volumes:
-      - ./apps/node:/usr/src/app
+      - apps/node:/usr/src/app

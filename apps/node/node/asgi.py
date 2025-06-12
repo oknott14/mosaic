@@ -1,5 +1,5 @@
 """
-ASGI config for node project.
+ASGI config for node project node.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

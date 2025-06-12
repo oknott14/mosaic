@@ -6,12 +6,13 @@ WORKDIR /usr/src/app
 
 COPY /apps/node/pyproject.toml pyproject.toml
 COPY apps/node/uv.lock uv.lock
-
-RUN uv sync --locked
-
-COPY apps/node/main.py main.py
 COPY apps/node/manage.py manage.py
 COPY apps/node/node node
+COPY apps/node/db.sqlite3 db.sqlite3
+
+RUN uv sync --locked
+ENV PATH="/usr/src/app/.venv/bin:$PATH"
+RUN uv run manage.py migrate
 
 CMD ["uv", "run",  "manage.py",  "runserver", "0.0.0.0:3000"]
 
