@@ -4,7 +4,10 @@ T = TypeVar('T')
 
 class Event(Generic[T]):
   
-  listeners: List[Callable[[T], None]] = []
+  listeners: List[Callable[[T], None]]
+
+  def __init__(self):
+    self.listeners = []
 
   def subscribe(self,func: Callable[[T], None]):
     if func in self.listeners: return

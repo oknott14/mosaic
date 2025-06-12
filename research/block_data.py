@@ -1,17 +1,18 @@
-from typing import TypeVar, Generic
+from abc import ABC
 import numpy as np
 from transaction import Transaction
 
-TTransaction = TypeVar('TTransaction')
-class BlockData(Generic[TTransaction]):
+class BlockData(ABC):
   transactions: np.typing.NDArray
-  count: int = 0
+  count: int
   limit: int
-  def __init__(self, limit: int = 10):
-    self.transactions = np.ndarray(limit, dtype=TTransaction)
+  
+  def __init__(self, limit: int = 3):
+    self.transactions = np.ndarray(limit, dtype=Transaction)
     self.limit = limit
+    self.count = 0
 
-  def add_transaction(self, transaction: TTransaction) -> bool:
+  def add_transaction(self, transaction: Transaction) -> bool:
     if (self.is_full()):
       return False
     else:

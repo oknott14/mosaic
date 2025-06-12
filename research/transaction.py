@@ -6,7 +6,7 @@ class Transaction:
     self.signature = signature
 
   def __str__(self):
-    return f'{self.frm} => {self.to} - {self.amnt} ({self.signature})'
+    return f'{self.frm} => {self.to} - {self.amnt}'
   
   def sign(self, signature: bytes):
     self.signature = signature

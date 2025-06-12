@@ -1,16 +1,13 @@
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.exceptions import InvalidSignature
-import secrets
 from transaction import Transaction
 from node import Node
 
 class Account(Node):
-  id: str
   balance: float
-
-  def __init__(self):
-    self.id = str(secrets.randbits(40))
+  name: str
+  def __init__(self, name: str, difficulty: int = 4):
     self.balance = 0
     self.__private_key = rsa.generate_private_key(65537, 1024)
     self.public_key = self.__private_key.public_key()
@@ -19,6 +16,8 @@ class Account(Node):
       salt_length=padding.PSS.MAX_LENGTH
     )
     self.__signature_algorithm = hashes.SHA256()
+    self.name = name
+    Node.__init__(self, difficulty)
 
   def __sign_bytes(self, data: bytes):
     return self.__private_key.sign(
@@ -28,11 +27,11 @@ class Account(Node):
     )
   
   def prepare_transaction(self, to: str, amnt: float) -> Transaction:
-    transaction = Transaction(self.id, to, amnt)
+    transaction = Transaction(self.name, to, amnt)
     signature = self.__sign_bytes(transaction.to_unsigned_bytes())
     return transaction.sign(signature)
   
-  def verify_transaction(self, transaction:Transaction) -> bool:
+  def verify_transaction(self, transaction: Transaction) -> bool:
     try:
       self.public_key.verify(
         transaction.signature,
