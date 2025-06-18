@@ -1,4 +1,5 @@
 FROM ghcr.io/astral-sh/uv:python3.12-alpine AS development
+RUN apt-get update -yq && apt-get install -yqq curl
 
 ENV PYTHONUNBUFFERED=1
 
@@ -10,7 +11,7 @@ COPY apps/node/manage.py manage.py
 COPY apps/node/node node
 COPY apps/node/db.sqlite3 db.sqlite3
 
-RUN uv sync --locked
+RUN uv sync
 ENV PATH="/usr/src/app/.venv/bin:$PATH"
 RUN uv run manage.py migrate
 
