@@ -16,4 +16,4 @@ class DiscoverApi(viewsets.ViewSet):
         body_unicode = request.body.decode("utf-8")
         body = json.loads(body_unicode)
         self.discover_service.register(NodeRegistration(*body))
-        return Response(MyRegistration(), status=status.HTTP_202_ACCEPTED)
+        return Response(MyRegistration().serialize(), status=status.HTTP_202_ACCEPTED)

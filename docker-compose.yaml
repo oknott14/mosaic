@@ -1,5 +1,5 @@
 services:
-  node_1:
+  node-1:
     build:
       context: .
       dockerfile: ./apps/node/Dockerfile
@@ -7,22 +7,15 @@ services:
     ports:
       - 3000:3000
     environment:
-      - NODE_ID=node_1
+      - NODE_ID=node-1
       - HOST=0.0.0.0
       - PORT=3000
       - BOOT_NODE=1
     volumes:
       - ./apps/node/:/usr/src/app
-    healthcheck:
-      test: ['CMD', 'curl', 'http://node_1:3000/health']
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 10s
-  node_2:
+  node-2:
     depends_on:
-      node_1:
-        condition: service_healthy
+      - node-1
     build:
       context: .
       dockerfile: ./apps/node/Dockerfile
@@ -30,10 +23,10 @@ services:
     ports:
       - 3001:3000
     environment:
-      - NODE_ID=node_2
+      - NODE_ID=node-2
       - HOST=0.0.0.0
       - PORT=3000
-      - BOOT_NODE_ID=node_1
+      - BOOT_NODE_ID=node-1
       - BOOT_NODE_HOST=0.0.0.0
       - BOOT_NODE_PORT=3000
     volumes:

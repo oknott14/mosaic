@@ -1,13 +1,12 @@
-from abc import ABC
 from os import environ
 from typing import Self
 
-import requests
+from node.network.api import NetworkApi
 
 from .registration import NodeRegistration
 
 
-class DiscoverService(ABC):
+class DiscoverService(NetworkApi):
     __instance: Self | None = None
     registry = {}
 
@@ -17,6 +16,7 @@ class DiscoverService(ABC):
         return cls.__instance
 
     def __init__(self):
+        super().__init__()
         if "BOOT_NODE_ID" in environ:
             boot_id = environ["BOOT_NODE_ID"]
             boot_host = environ["BOOT_NODE_HOST"]
@@ -27,12 +27,14 @@ class DiscoverService(ABC):
     def introduce(self):
         for registration in self.registry.values():
             print(f"Introduction to {registration.url}")
-            response = requests.post(
-                f"{registration.url}/discover",
+            response = self.http.post(
+                f"{registration.url}/discover/",
                 registration.serialize(),
                 headers={"Content-Type": "application/json"},
             )
-            self.register(NodeRegistration(*response.json()))
+
+            response_json = response.json()
+            self.register(NodeRegistration(*response_json))
 
     def register(self, registration: NodeRegistration):
         self.registry[registration.id] = registration

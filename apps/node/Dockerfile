@@ -1,5 +1,4 @@
 FROM ghcr.io/astral-sh/uv:python3.12-alpine AS development
-RUN apt-get update -yq && apt-get install -yqq curl
 
 ENV PYTHONUNBUFFERED=1
 
