@@ -1,18 +1,18 @@
 FROM ghcr.io/astral-sh/uv:python3.12-alpine AS development
 
+# Accept build argument
+ARG API_PORT=3000
+ARG API_HOST=0.0.0.0
+
+ENV PORT=$API_PORT
+ENV HOST=$API_HOST
+
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /usr/src/app
 
-COPY /apps/node/pyproject.toml pyproject.toml
-COPY apps/node/uv.lock uv.lock
-COPY apps/node/manage.py manage.py
-COPY apps/node/node node
-COPY apps/node/db.sqlite3 db.sqlite3
+COPY /apps/node/ .
 
 RUN uv sync
-ENV PATH="/usr/src/app/.venv/bin:$PATH"
-RUN uv run manage.py migrate
 
-CMD ["uv", "run",  "manage.py",  "runserver", "0.0.0.0:3000"]
-
+CMD uv run fastapi dev main.py --port ${PORT} --host ${HOST}
