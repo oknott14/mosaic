@@ -1,41 +1,24 @@
-from os import environ
-from typing import Self
-
-from node.network.api import NetworkApi
-
-from .registration import NodeRegistration
+from node.clients.http_client import HttpClient
+from node.decorators.singleton import singleton
+from node.models.node import Node
 
 
-class DiscoverService(NetworkApi):
-    __instance: Self | None = None
-    registry = {}
-
-    def __new__(cls):
-        if cls.__instance is None:
-            cls.__instance = super().__new__(cls)
-        return cls.__instance
-
+@singleton
+class NodeDiscoverService(HttpClient):
     def __init__(self):
         super().__init__()
-        if "BOOT_NODE_ID" in environ:
-            boot_id = environ["BOOT_NODE_ID"]
-            boot_host = environ["BOOT_NODE_HOST"]
-            boot_port = int(environ["BOOT_NODE_PORT"])
+        self.add_retry_strategy()
 
-            self.register(NodeRegistration(boot_id, boot_host, boot_port))
-
-    def introduce(self):
-        for registration in self.registry.values():
-            print(f"Introduction to {registration.url}")
-            response = self.http.post(
-                f"{registration.url}/discover/",
-                registration.serialize(),
-                headers={"Content-Type": "application/json"},
+    def introduce(self, node: Node) -> Node | None:
+        try:
+            print(f"Making introduction to {node.url}")
+            response = self.post(
+                f"{node.url}/discover/",
+                node.serialize(),
+                {"Content-Type": "application/json"},
             )
 
-            response_json = response.json()
-            self.register(NodeRegistration(*response_json))
-
-    def register(self, registration: NodeRegistration):
-        self.registry[registration.id] = registration
-        return True
+            print(response)
+            return Node(*response.body)
+        except Exception as e:
+            print(f"Failed to introduce to {node.url} - {e}")

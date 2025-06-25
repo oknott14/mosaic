@@ -1,0 +1,26 @@
+@startuml
+
+component "DiscoveryService" as ds_1 {
+
+  component "discover" as ds_1_discover
+
+  component "check_connection" as ds_1_check_connection
+
+}
+
+component "DiscoveryApi" as a_api_1 {
+
+  component "Discover" as d_api_1_discover
+
+}
+
+component "NodeRegistry" as nr_1 {
+
+  component "register" as nr_1_register
+
+  component "remove" as nr_1_remove
+
+}
+
+
+@enduml
