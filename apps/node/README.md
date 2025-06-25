@@ -1,4 +1,4 @@
 # Node
 
-This folder will hold the DJango web app that represents a node in the mosaic blockchain network.
+This folder will hold a FastAPI web app that acts as the standard API for a Node in the Mosaic Blockchain
 
