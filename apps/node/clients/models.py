@@ -1,13 +1,14 @@
-from abc import ABC
-from dataclasses import dataclass, field
-from typing import Any, Dict
+from typing import Generic, TypeVar
+
+from pydantic import BaseModel
 
 
-@dataclass
-class HttpResponse(ABC):
+class HttpResponse(BaseModel):
     status: int
 
 
-@dataclass
-class HttpPostResponse(HttpResponse):
-    body: Dict[Any, Any] = field(default_factory=dict)
+T = TypeVar("T", bound=BaseModel)
+
+
+class HttpPostResponse(HttpResponse, Generic[T]):
+    body: T

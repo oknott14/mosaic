@@ -1,7 +1,7 @@
 from typing import Dict
 
-from node.decorators.singleton import singleton
-from node.models.node import BootNode, MyNode, Node
+from ..decorators.singleton import singleton
+from ..models.node import BootNode, MyNode, Node
 
 
 class RegistrationException(Exception):
@@ -17,13 +17,10 @@ class NodeRegistry:
     def __init__(self):
         boot_node = BootNode()
 
-        if boot_node.is_valid:
-            self.register(boot_node)
+    
+        self.register(boot_node)
 
     def register(self, node: Node) -> Node:
-        if not node.is_valid:
-            raise RegistrationException(node)
-
         if node.id not in self.__registry:
             self.__registry[node.id] = node
 

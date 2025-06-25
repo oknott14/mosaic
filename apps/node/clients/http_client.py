@@ -1,11 +1,14 @@
-from typing import Any, Dict
+from typing import Any, Dict, Type, TypeVar
 
+from pydantic import BaseModel
 from requests import Session
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 from .exceptions import HttpPostException
 from .models import HttpPostResponse
+
+T = TypeVar("T", bound=BaseModel)
 
 
 class HttpClient:
@@ -29,16 +32,21 @@ class HttpClient:
         )
 
     def post(
-        self, route: str, body: Dict[Any, Any], headers: Dict[str, str]
-    ) -> HttpPostResponse:
+        self,
+        route: str,
+        body: Dict[Any, Any] | BaseModel,
+        headers: Dict[str, str],
+        response_cls: Type[T],
+    ) -> HttpPostResponse[T]:
         try:
             print(f"Seiding post request to {route} | {body} | {headers}")
             raw_response = self.http.post(route, json=body, headers=headers)
 
             raw_response.raise_for_status()
 
-            return HttpPostResponse(
-                status=raw_response.status_code, body=raw_response.json()
+            return HttpPostResponse[T](
+                status=raw_response.status_code,
+                body=response_cls(**raw_response.json()),
             )
 
         except Exception as e:
