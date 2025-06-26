@@ -1,5 +1,5 @@
 services:
-  node-1:
+  boot-node:
     build:
       context: .
       dockerfile: ./apps/node/Dockerfile
@@ -10,7 +10,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - NODE_ID=node-1
+      - NODE_ID=boot-node
       - FASTAPI_PORT=3000
       - BOOT_NODE=1
     volumes:
@@ -31,7 +31,7 @@ services:
       start_period: 10s
   node-2:
     depends_on:
-      node-1:
+      boot-node:
         condition: service_healthy
     build:
       context: .
@@ -45,8 +45,5 @@ services:
     environment:
       - NODE_ID=node-2
       - FASTAPI_PORT=3000
-      - BOOT_NODE_ID=node-1
-      - BOOT_NODE_HOST=0.0.0.0
-      - BOOT_NODE_PORT=3000
     volumes:
       - ./apps/node/:/usr/src/app

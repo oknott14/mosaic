@@ -17,8 +17,8 @@ Mosaic is a educational blockchain project designed to demonstrate core blockcha
 
 ## Requirements
 
-- Python 3.8+
-- Dependencies listed in `requirements.txt`
+- Python 3.12+
+- Docker 28.2.2+
 
 ## Installation
 
@@ -29,8 +29,7 @@ git clone https://github.com/oknott14/mosaic.git
 cd mosaic
 ```
 
-2. Install the [UV package manager](https://github.com/astral-sh/uv?tab=readme-ov-file#installation)
-3. 
+2. Run `docker compose up` to start the container(s)
 
 ## Project Structure
 
